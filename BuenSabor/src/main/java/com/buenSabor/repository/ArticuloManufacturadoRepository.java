@@ -1,9 +1,13 @@
 package com.buenSabor.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.buenSabor.entity.ArticuloManufacturado;
 
-public interface ArticuloManufacturadoRepository extends CrudRepository<ArticuloManufacturado, Long>{
+public interface ArticuloManufacturadoRepository extends PagingAndSortingRepository<ArticuloManufacturado, Long>{
+	
+	@Query("select a from ArticuloManufacturado a where a.fechaBaja is null")
+	public Iterable<ArticuloManufacturado> findAllArticulosManufacturadosAlta();
 
 }

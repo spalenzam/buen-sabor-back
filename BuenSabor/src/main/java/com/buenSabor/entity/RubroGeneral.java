@@ -1,11 +1,15 @@
 package com.buenSabor.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -19,6 +23,10 @@ public class RubroGeneral {
 	@NotEmpty
 	@Column(name="denominacion")
 	private String denominacion;
+	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
 
 	public Long getId() {
 		return id;
@@ -35,4 +43,13 @@ public class RubroGeneral {
 	public void setDenominacion(String denominacion) {
 		this.denominacion = denominacion;
 	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+	
 }

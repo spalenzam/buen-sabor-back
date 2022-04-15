@@ -1,6 +1,7 @@
 package com.buenSabor.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,6 +31,10 @@ public class RubroArticulo {
 	@NotEmpty
 	@Column(name = "denominacion")
 	private String denominacion;
+	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
 	
 	@JsonIgnoreProperties(value= {"rubroarticuloHijos"})
 	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
@@ -72,5 +79,15 @@ public class RubroArticulo {
 	public void setRubroarticuloHijos(List<RubroArticulo> rubroarticuloHijos) {
 		this.rubroarticuloHijos = rubroarticuloHijos;
 	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+	
+	
 
 }
