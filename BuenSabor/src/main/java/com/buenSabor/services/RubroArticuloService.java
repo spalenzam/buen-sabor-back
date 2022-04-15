@@ -4,5 +4,6 @@ import com.buenSabor.entity.RubroArticulo;
 import com.commons.services.CommonService;
 
 public interface RubroArticuloService extends CommonService<RubroArticulo>{
+	public Iterable<RubroArticulo> findAllRubroArticuloAlta();
 
 }

@@ -1,6 +1,7 @@
 package com.buenSabor.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -43,6 +46,10 @@ public class ArticuloManufacturado {
 	@NotNull
 	@Column(name = "precioVenta")
 	private double precioVenta;
+	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
 	
 	//VER EL TIPO DE DATO DE IMAGEN MAGNI PONE STRING
 	//LOB campo de objeto pesado 
@@ -79,12 +86,12 @@ public class ArticuloManufacturado {
 		this.tiempoEstimadoCocina = tiempoEstimadoCocina;
 	}
 
-	public String getDenominación() {
+	public String getDenominacion() {
 		return denominacion;
 	}
 
-	public void setDenominación(String denominación) {
-		this.denominacion = denominación;
+	public void setDenominacion(String denominacion) {
+		this.denominacion = denominacion;
 	}
 
 	public double getPrecioVenta() {
@@ -120,6 +127,14 @@ public class ArticuloManufacturado {
 		articulomanufacturadodetalles.forEach(this::addArticulomanufacturadodetalle);;
 	}
 	
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
 	//agregar art manf detalle + establecer relacion inversa
 	public void addArticulomanufacturadodetalle(ArticuloManufacturadoDetalle articulomanufacturadodetalle) {
 		this.articulomanufacturadodetalles.add(articulomanufacturadodetalle);

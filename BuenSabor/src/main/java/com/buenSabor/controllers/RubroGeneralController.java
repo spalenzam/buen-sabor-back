@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,5 +38,10 @@ public class RubroGeneralController extends CommonController<RubroGeneral, Rubro
 		rubrogeneralDB.setDenominacion(rubrogeneral.getDenominacion());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(rubrogeneralDB));
+	}
+	
+	@GetMapping("/alta")
+	public ResponseEntity<?> listarAlta(){
+		return ResponseEntity.ok().body(service.findAllRubroGeneralAlta());
 	}
 }

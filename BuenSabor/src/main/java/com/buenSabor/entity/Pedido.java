@@ -63,6 +63,10 @@ public class Pedido {
     @JoinColumn(name = "fk_cliente")
 	private Cliente cliente;
 	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
+	
 	@JsonIgnoreProperties(value = {"pedido"}, allowSetters = true)
 	@OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DetallePedido> detallepedidos;
@@ -143,6 +147,14 @@ public class Pedido {
 	public void setDetallepedidos(List<DetallePedido> detallepedidos) {
 		this.detallepedidos.clear();
 		detallepedidos.forEach(this::addDetallepedidos);
+	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
 	}
 
 	public void addDetallepedidos(DetallePedido detallepedido) {

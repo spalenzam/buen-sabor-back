@@ -1,5 +1,7 @@
 package com.buenSabor.entity;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -23,7 +27,7 @@ public class ArticuloInsumo {
 	
 	@NotEmpty
 	@Column(name = "denominacion")
-	private String denominación;
+	private String denominacion;
 	
 	@Min(1)
 	@NotNull
@@ -52,6 +56,10 @@ public class ArticuloInsumo {
 	@Column(name = "es_insumo")
 	private boolean esInsumo;
 	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
+	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "fk_rubro_articulo")
 	private RubroArticulo rubroarticulo;
@@ -64,12 +72,12 @@ public class ArticuloInsumo {
 		this.id = id;
 	}
 
-	public String getDenominación() {
-		return denominación;
+	public String getDenominacion() {
+		return denominacion;
 	}
 
-	public void setDenominación(String denominación) {
-		this.denominación = denominación;
+	public void setDenominacion(String denominacion) {
+		this.denominacion = denominacion;
 	}
 
 	public double getPrecioCompra() {
@@ -127,5 +135,15 @@ public class ArticuloInsumo {
 	public void setRubroarticulo(RubroArticulo rubroarticulo) {
 		this.rubroarticulo = rubroarticulo;
 	}
+
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+	
+	
 
 }

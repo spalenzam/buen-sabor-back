@@ -1,5 +1,7 @@
 package com.buenSabor.entity;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
@@ -32,8 +36,10 @@ public class Usuario {
 	@NotEmpty
 	@Column(name = "rol")
 	private String rol;
-
-	//NO SE SI HACE FALTA QUE SE GUARDE LA FECHA Y HORA DE CREACIÓN DEL USUARIO
+	
+	@Column(name = "fecha_baja")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fechaBaja;
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_cliente")
@@ -79,8 +85,12 @@ public class Usuario {
 		this.cliente = cliente;
 	}
 
-	
-	
-	
-	
+	public Date getFechaBaja() {
+		return fechaBaja;
+	}
+
+	public void setFechaBaja(Date fechaBaja) {
+		this.fechaBaja = fechaBaja;
+	}
+
 }
