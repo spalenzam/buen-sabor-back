@@ -45,5 +45,9 @@ public class ArticuloManufacturadoController extends CommonController<ArticuloMa
 		return ResponseEntity.ok().body(service.findAllArticulosManufacturadosAlta());
 	}
 	
-	
+	@PutMapping("/dar-de-baja/{id}")
+	public ResponseEntity<?> darDeBaja(@PathVariable Long id){
+		//service.deleteByIdAndBaja(id);
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
+	}
 }

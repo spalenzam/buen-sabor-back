@@ -5,6 +5,8 @@ import com.commons.services.CommonService;
 
 public interface PedidoService extends CommonService<Pedido>{
 	
-	public Iterable<Pedido> findAllPedidosAlta();
+	Iterable<Pedido> findAllPedidosAlta();
+	
+	Pedido deleteByIdAndBaja(Long id);
 	
 }

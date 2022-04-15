@@ -5,6 +5,8 @@ import com.commons.services.CommonService;
 
 public interface ArticuloManufacturadoService extends CommonService<ArticuloManufacturado>{
 	
-	public Iterable<ArticuloManufacturado> findAllArticulosManufacturadosAlta();
+	Iterable<ArticuloManufacturado> findAllArticulosManufacturadosAlta();
+	
+	ArticuloManufacturado deleteByIdAndBaja(Long id);
 
 }

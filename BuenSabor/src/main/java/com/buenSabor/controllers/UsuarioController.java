@@ -45,4 +45,10 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 	public ResponseEntity<?> listarAlta(){
 		return ResponseEntity.ok().body(service.findAllUsuarioAlta());
 	}
+	
+	@PutMapping("/dar-de-baja/{id}")
+	public ResponseEntity<?> darDeBaja(@PathVariable Long id){
+		//service.deleteByIdAndBaja(id);
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
+	}
 }
