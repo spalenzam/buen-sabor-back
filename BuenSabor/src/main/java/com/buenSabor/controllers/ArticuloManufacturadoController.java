@@ -50,4 +50,9 @@ public class ArticuloManufacturadoController extends CommonController<ArticuloMa
 		//service.deleteByIdAndBaja(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
 	}
+	
+	@GetMapping("/cantidad-disponible")
+	public ResponseEntity<?> findCantidadDisponible(){
+		return ResponseEntity.ok().body(service.findCantidadDisponible());
+	}
 }
