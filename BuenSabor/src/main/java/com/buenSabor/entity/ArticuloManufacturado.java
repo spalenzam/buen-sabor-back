@@ -53,7 +53,6 @@ public class ArticuloManufacturado {
 	
 	//VER EL TIPO DE DATO DE IMAGEN MAGNI PONE STRING
 	//LOB campo de objeto pesado 
-	@NotEmpty
 	@Lob
 	@JsonIgnore
 	private byte [] imagen;
@@ -146,4 +145,8 @@ public class ArticuloManufacturado {
 			this.articulomanufacturadodetalles.remove(articulomanufacturadodetalle);
 			articulomanufacturadodetalle.setArticulomanufacturado(null);
 		}
+		
+	public Integer getImagenHashCode() {
+		return (this.imagen != null) ? this.imagen.hashCode() : null;
+	}
 }

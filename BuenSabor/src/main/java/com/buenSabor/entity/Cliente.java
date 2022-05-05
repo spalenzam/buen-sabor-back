@@ -30,8 +30,6 @@ public class Cliente {
 	@Column(name="apellido")
 	private String apellido;
 	
-	@Min(1)
-	@NotNull
 	@Column(name="telefono")
 	private Long telefono;
 	
