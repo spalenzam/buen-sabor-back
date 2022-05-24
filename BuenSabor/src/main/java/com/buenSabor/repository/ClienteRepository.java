@@ -6,4 +6,5 @@ import com.buenSabor.entity.Cliente;
 
 public interface ClienteRepository extends CrudRepository<Cliente, Long>{
 
+
 }

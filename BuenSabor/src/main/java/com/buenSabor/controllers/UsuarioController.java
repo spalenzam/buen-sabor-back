@@ -15,12 +15,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.buenSabor.entity.Usuario;
+import com.buenSabor.services.ClienteService;
 import com.buenSabor.services.UsuarioService;
 import com.commons.controllers.CommonController;
 
 @RestController
 @RequestMapping(path="api/buensabor/usuarios")
 public class UsuarioController extends CommonController<Usuario, UsuarioService> {
+	
+	private final ClienteService clienteService;
+
+	public UsuarioController(ClienteService clienteService) {
+		super();
+		this.clienteService = clienteService;
+	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> editar (@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable Long id){
@@ -36,7 +44,12 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 		
 		//Una vez que encontramos el id reemplazamos el Usuario
 		Usuario usuarioDB = o.get();
+		usuarioDB.setUsuario(usuario.getUsuario()); //se modifica la contraseña
 		usuarioDB.setClave(usuario.getClave()); //se modifica la contraseña
+		
+		if(usuarioDB.getCliente() != null){
+			clienteService.updateCliente(usuario.getCliente(), usuarioDB.getCliente().getId());
+		}
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(usuarioDB));
 	}

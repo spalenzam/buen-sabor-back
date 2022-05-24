@@ -40,6 +40,29 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		mercadoPagoDatosDB.setEstado(mercadoPagoDatos.getEstado());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(mercadoPagoDatosDB));		
-	}
+	}//El token tendría que pasarlo en los argumentos
+	/*@PostMapping("/efectuarpago/{factura}")
+	public ResponseEntity<?> realizarPago(@RequestBody Factura factura) throws MPException {
+		MercadoPago.SDK.setAccessToken("TEST-3502556041132733-050214-ef47a9e5aa971c2965bc747986c19440-187659340");
+		Preference preference = new Preference();
+		Item item = new Item();
+		for (DetalleFactura detalle : factura.getDetallesFacturas()) {
+			if(detalle.getArticuloInsumo() == null) {
+				item.setTitle(detalle.getArticuloMfact().getDenominacion())
+				.setQuantity(detalle.getCantidad())
+				.setUnitPrice((float)detalle.getArticuloMfact().getPrecioVenta())
+				;
+				preference.appendItem(item);
+			} else {
+				item.setTitle(detalle.getArticuloInsumo().getDenominacion())
+				.setQuantity(detalle.getCantidad())
+				.setUnitPrice((float) detalle.getArticuloInsumo().getPrecioVenta());
+				preference.appendItem(item);
+			}
+			
+		}
+		preference.save();
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(preference);
+	}*/
 
 }
