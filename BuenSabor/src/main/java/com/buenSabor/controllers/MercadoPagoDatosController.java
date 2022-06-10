@@ -12,18 +12,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.buenSabor.entity.DetalleFactura;
 import com.buenSabor.entity.MercadoPagoDatos;
 import com.buenSabor.services.MercadoPagoDatosService;
 import com.buenSabor.services.MercadoPagoDatosServiceImpl;
+import com.buenSabor.services.dto.DetallePedidoDTO;
 import com.commons.controllers.CommonController;
 
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferencePaymentMethodsRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 
 @RestController
@@ -34,7 +36,7 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 	protected MercadoPagoDatosServiceImpl mercadoPagoDatosService;
 	
 	@PostMapping("/payment")
-	public ResponseEntity<?> processPayment(@RequestBody DetalleFactura detfactura) throws MPException, MPApiException {
+	public ResponseEntity<?> processPayment(@RequestBody DetallePedidoDTO detpedido) throws MPException, MPApiException {
 		MercadoPagoConfig.setAccessToken("TEST-5308942090062149-050414-517f77a9e02222eef1cd89f17966b93f-447851281");
 		
 		// Crea un objeto de preferencia
@@ -44,13 +46,29 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		
 			PreferenceItemRequest item =
 			   PreferenceItemRequest.builder()
-			       .title(detfactura.getArtmanufacturado().getDenominacion())
-			       .quantity(detfactura.getCantidad())
-			       .unitPrice(new BigDecimal(detfactura.getArtmanufacturado().getPrecioVenta()))
+			       .title(detpedido.getDescripcion())
+			       .quantity(detpedido.getCantidad())
+			       .unitPrice(new BigDecimal(detpedido.getTotalPagar()))
 			       .build();
 			items.add(item);
 		
-		PreferenceRequest request = PreferenceRequest.builder().items(items).build();
+		PreferenceBackUrlsRequest backUrls = 
+				PreferenceBackUrlsRequest.builder()
+				.success("http://localhost:3000/productos")
+				.failure("http://localhost:3000/productos")
+				.pending("http://localhost:3000/productos")
+				.build();
+				
+
+		PreferencePaymentMethodsRequest paymentMethods =
+		   PreferencePaymentMethodsRequest.builder()
+		       .installments(3)
+		       .build();
+		
+		PreferenceRequest request = 
+				PreferenceRequest.builder().items(items).backUrls(backUrls).paymentMethods(paymentMethods).build();
+		
+		
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.create(request));
 	} 
