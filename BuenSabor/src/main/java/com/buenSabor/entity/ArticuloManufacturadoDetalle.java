@@ -24,7 +24,7 @@ public class ArticuloManufacturadoDetalle {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Min(1)
+	@Min((long) 0.1)
 	@NotNull
 	@Column(name = "cantidad")
 	private float cantidad;
@@ -33,12 +33,12 @@ public class ArticuloManufacturadoDetalle {
 	@Column(name = "unidad_medida")
 	private String unidadMedida;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne()
 	@JoinColumn(name = "fk_articulo_insumo")
 	private ArticuloInsumo articuloinsumo;
 	
 	@JsonIgnoreProperties(value = {"articulomanufacturadodetalle"})
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_articulo_manufacturado")
 	private ArticuloManufacturado articulomanufacturado;
 
