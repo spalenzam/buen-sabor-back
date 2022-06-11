@@ -1,6 +1,6 @@
 package com.buenSabor.controllers;
 
-import java.util.Optional;
+
 
 import javax.validation.Valid;
 
@@ -17,9 +17,12 @@ import com.buenSabor.entity.ArticuloManufacturadoDetalle;
 import com.buenSabor.services.ArticuloManufacturadoDetalleService;
 import com.commons.controllers.CommonController;
 
+
 @RestController
 @RequestMapping(path = "api/buensabor/artmanufacturadodetalle")
 public class ArticuloManufacturadoDetalleController extends CommonController<ArticuloManufacturadoDetalle, ArticuloManufacturadoDetalleService>{
+	
+	
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> editar (@Valid @RequestBody ArticuloManufacturadoDetalle artmanufacturadodetalle, BindingResult result, @PathVariable Long id){
@@ -28,14 +31,9 @@ public class ArticuloManufacturadoDetalleController extends CommonController<Art
 			return this.validar(result);
 		}		
 		
-		Optional<ArticuloManufacturadoDetalle> o = service.findById(id);
-		if(o.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		ArticuloManufacturadoDetalle articuloManufacturadoDetalle = service.updateDetalle(artmanufacturadodetalle, id);
 		
-		ArticuloManufacturadoDetalle artmanufacturadodetalleDB = o.get();
-		artmanufacturadodetalleDB.setCantidad(artmanufacturadodetalle.getCantidad());
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(artmanufacturadodetalleDB));
+		return ResponseEntity.status(HttpStatus.CREATED).body(articuloManufacturadoDetalle);
 	}
 }

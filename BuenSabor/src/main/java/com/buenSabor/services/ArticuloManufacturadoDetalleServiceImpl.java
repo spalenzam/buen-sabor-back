@@ -1,6 +1,7 @@
 package com.buenSabor.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +16,40 @@ public class ArticuloManufacturadoDetalleServiceImpl extends CommonServiceImpl<A
 	
 	@Autowired
 	ArticuloManufacturadoDetalleRepository articuloManufacturadoDetalleRepository;
+	
+	private final ArticuloInsumoService articuloInsumoService;
+	
+
+	public ArticuloManufacturadoDetalleServiceImpl(ArticuloInsumoService articuloInsumoService) {
+		super();
+		this.articuloInsumoService = articuloInsumoService;
+	}
 
 	@Override
 	public List<ArticuloManufacturadoDetalle> findByArticuloManufacturado(ArticuloManufacturado a) {
 		// TODO Auto-generated method stub
 		return articuloManufacturadoDetalleRepository.findByArticuloManufacturado(a);
+	}
+
+	@Override
+	public ArticuloManufacturadoDetalle updateDetalle(ArticuloManufacturadoDetalle artmanufacturadodetalle, Long id) {
+		
+		Optional<ArticuloManufacturadoDetalle> o = findById(id);
+		if(o.isEmpty()) {
+			return o.get();
+		}
+		
+		ArticuloManufacturadoDetalle artmanufacturadodetalleDB = o.get();
+		artmanufacturadodetalleDB.setCantidad(artmanufacturadodetalle.getCantidad());
+		artmanufacturadodetalleDB.setUnidadMedida(artmanufacturadodetalle.getUnidadMedida());
+		
+		
+		
+		
+		save(artmanufacturadodetalleDB);
+		
+		
+		return artmanufacturadodetalleDB;
 	}
 
 }
