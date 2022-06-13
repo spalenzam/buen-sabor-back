@@ -1,9 +1,8 @@
 package com.buenSabor.controllers;
 
-import java.io.Console;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-
 
 import javax.validation.Valid;
 
@@ -24,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.buenSabor.entity.ArticuloManufacturado;
+import com.buenSabor.entity.ArticuloManufacturadoDetalle;
 import com.buenSabor.entity.RubroGeneral;
+import com.buenSabor.services.ArticuloManufacturadoDetalleService;
 import com.buenSabor.services.ArticuloManufacturadoService;
 import com.buenSabor.services.RubroGeneralService;
 import com.buenSabor.services.errors.BuenSaborException;
@@ -32,144 +33,174 @@ import com.buenSabor.services.errors.ErrorConstants;
 import com.commons.controllers.CommonController;
 
 @RestController
-@RequestMapping(path="api/buensabor/articulosmanufacturados")
-public class ArticuloManufacturadoController extends CommonController<ArticuloManufacturado, ArticuloManufacturadoService>{
-	
+@RequestMapping(path = "api/buensabor/articulosmanufacturados")
+public class ArticuloManufacturadoController
+		extends CommonController<ArticuloManufacturado, ArticuloManufacturadoService> {
+
 	private final RubroGeneralService rubroGeneralService;
-	
-	
-	
-	public ArticuloManufacturadoController(RubroGeneralService rubroGeneralService) {
+
+	private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
+
+	public ArticuloManufacturadoController(RubroGeneralService rubroGeneralService,
+			ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService) {
 		super();
 		this.rubroGeneralService = rubroGeneralService;
+		this.articuloManufacturadoDetalleService = articuloManufacturadoDetalleService;
 	}
 
 	@GetMapping("/uploads/img/{id}")
-	public ResponseEntity<?> verImagen(@PathVariable Long id){
-		
+	public ResponseEntity<?> verImagen(@PathVariable Long id) {
+
 		Optional<ArticuloManufacturado> o = service.findById(id);
-		if(o.isEmpty() || o.get().getImagen() == null ){
+		if (o.isEmpty() || o.get().getImagen() == null) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		Resource imagen = new ByteArrayResource(o.get().getImagen());
-		
+
 		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imagen);
-		
+
 	}
-	
+
 	@PostMapping("/crear-con-imagen")
-	public ResponseEntity<?> crearConImagen(@Valid ArticuloManufacturado articuloManufacturado, BindingResult result, @RequestParam("archivo") MultipartFile archivo) throws IOException {
-		
-		if(!archivo.isEmpty()){
+	public ResponseEntity<?> crearConImagen(@Valid ArticuloManufacturado articuloManufacturado, BindingResult result,
+			@RequestParam("archivo") MultipartFile archivo) throws IOException {
+
+		if (!archivo.isEmpty()) {
 			articuloManufacturado.setImagen(archivo.getBytes());
 		}
-		
-		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService.findById(articuloManufacturado.getRubrogeneral().getId());
-		if(rubroGeneralOptional.isPresent())
+
+		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService
+				.findById(articuloManufacturado.getRubrogeneral().getId());
+		if (rubroGeneralOptional.isPresent())
 			articuloManufacturado.setRubrogeneral(rubroGeneralOptional.get());
-		else throw new BuenSaborException("No se encontró el rubro general ingresado",ErrorConstants.ERR_BUSCAR);
-		
-		if(result.hasErrors()) {
+		else
+			throw new BuenSaborException("No se encontró el rubro general ingresado", ErrorConstants.ERR_BUSCAR);
+
+		if (result.hasErrors()) {
 			return this.validar(result);
 		}
-		
+
 		ArticuloManufacturado articuloManufacturadoEntity = service.save(articuloManufacturado);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(articuloManufacturadoEntity);
 	}
-	
+
 	@PostMapping("/crear-con-rubro")
-	public ResponseEntity<?> crearConRubro(@Valid @RequestBody ArticuloManufacturado articuloManufacturado, BindingResult result) throws IOException {
+	public ResponseEntity<?> crearConRubro(@Valid @RequestBody ArticuloManufacturado articuloManufacturado,
+			BindingResult result) throws IOException {
 		System.out.println();
-		
-		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService.findById(articuloManufacturado.getRubrogeneral().getId());
-		if(rubroGeneralOptional.isPresent())
+
+		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService
+				.findById(articuloManufacturado.getRubrogeneral().getId());
+		if (rubroGeneralOptional.isPresent())
 			articuloManufacturado.setRubrogeneral(rubroGeneralOptional.get());
-		else throw new BuenSaborException("No se encontró el rubro general ingresado",ErrorConstants.ERR_BUSCAR);
-		
-		if(result.hasErrors()) {
+		else
+			throw new BuenSaborException("No se encontró el rubro general ingresado", ErrorConstants.ERR_BUSCAR);
+
+		if (result.hasErrors()) {
 			return this.validar(result);
 		}
-		
+
 		ArticuloManufacturado articuloManufacturadoEntity = service.save(articuloManufacturado);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(articuloManufacturadoEntity);
 	}
-	
+
 	@PutMapping("/editar-con-imagen/{id}")
-	public ResponseEntity<?> editarConImagen (@Valid ArticuloManufacturado artmanufacturado, BindingResult result, @PathVariable Long id, @RequestParam("archivo") MultipartFile archivo) throws IOException{
-		
-		if(result.hasErrors()) {
+	public ResponseEntity<?> editarConImagen(@Valid ArticuloManufacturado artmanufacturado, BindingResult result,
+			@PathVariable Long id, @RequestParam("archivo") MultipartFile archivo) throws IOException {
+
+		if (result.hasErrors()) {
 			return this.validar(result);
-		}		
-		 		
+		}
+
+		// Busco el producto
 		Optional<ArticuloManufacturado> o = service.findById(id);
-		if(o.isEmpty()){
+		if (o.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
-		/*ArticuloManufacturado artmanufacturadoDB = o.get();
-		artmanufacturadoDB.setPrecioVenta(artmanufacturado.getPrecioVenta());
-		if(!archivo.isEmpty()){
-			artmanufacturadoDB.setImagen(archivo.getBytes());
-		}*/
-		
+
+		/*
+		 * ArticuloManufacturado artmanufacturadoDB = o.get();
+		 * artmanufacturadoDB.setPrecioVenta(artmanufacturado.getPrecioVenta());
+		 * if(!archivo.isEmpty()){ artmanufacturadoDB.setImagen(archivo.getBytes()); }
+		 */
+
+		// Le actualizo los datos
 		ArticuloManufacturado artmanufacturadoDB = o.get();
 		artmanufacturadoDB.setDenominacion(artmanufacturado.getDenominacion());
 		artmanufacturadoDB.setPrecioVenta(artmanufacturado.getPrecioVenta());
 		artmanufacturadoDB.setTiempoEstimadoCocina(artmanufacturado.getTiempoEstimadoCocina());
-		
-		if(!archivo.isEmpty()){
+
+		// Seteo la imagen
+		if (!archivo.isEmpty()) {
 			artmanufacturadoDB.setImagen(archivo.getBytes());
 		}
-		
-		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService.findById(artmanufacturado.getRubrogeneral().getId());
-		if(rubroGeneralOptional.isPresent())
+
+		// Seteo el rubro
+		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService
+				.findById(artmanufacturado.getRubrogeneral().getId());
+		if (rubroGeneralOptional.isPresent())
 			artmanufacturadoDB.setRubrogeneral(rubroGeneralOptional.get());
-		else throw new BuenSaborException("No se encontró el rubro general ingresado",ErrorConstants.ERR_BUSCAR);
-		
+		else
+			throw new BuenSaborException("No se encontró el rubro general ingresado", ErrorConstants.ERR_BUSCAR);
+
+		// Lo guardo
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(artmanufacturadoDB));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> editar (@Valid @RequestBody ArticuloManufacturado artmanufacturado, BindingResult result, @PathVariable Long id){
-		
-		if(result.hasErrors()) {
+	public ResponseEntity<?> editar(@Valid @RequestBody ArticuloManufacturado artmanufacturado, BindingResult result,
+			@PathVariable Long id) {
+
+		if (result.hasErrors()) {
 			return this.validar(result);
-		}		
-		 		
+		}
+
 		Optional<ArticuloManufacturado> o = service.findById(id);
-		if(o.isEmpty()){
+		if (o.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		ArticuloManufacturado artmanufacturadoDB = o.get();
 		artmanufacturadoDB.setDenominacion(artmanufacturado.getDenominacion());
 		artmanufacturadoDB.setPrecioVenta(artmanufacturado.getPrecioVenta());
 		artmanufacturadoDB.setTiempoEstimadoCocina(artmanufacturado.getTiempoEstimadoCocina());
-		
-		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService.findById(artmanufacturado.getRubrogeneral().getId());
-		if(rubroGeneralOptional.isPresent())
+
+		// Seteo los detalles si es que tiene
+		if (artmanufacturado.getArticulomanufacturadodetalles().size() > 0) {
+			for (ArticuloManufacturadoDetalle detalle : artmanufacturado.getArticulomanufacturadodetalles()) {
+
+				articuloManufacturadoDetalleService.save(detalle);
+
+				artmanufacturadoDB.addArticulomanufacturadodetalle(detalle);
+			}
+		}
+
+		Optional<RubroGeneral> rubroGeneralOptional = rubroGeneralService
+				.findById(artmanufacturado.getRubrogeneral().getId());
+		if (rubroGeneralOptional.isPresent())
 			artmanufacturadoDB.setRubrogeneral(rubroGeneralOptional.get());
-		else throw new BuenSaborException("No se encontró el rubro general ingresado",ErrorConstants.ERR_BUSCAR);
-		
+		else
+			throw new BuenSaborException("No se encontró el rubro general ingresado", ErrorConstants.ERR_BUSCAR);
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(artmanufacturadoDB));
 	}
-	
+
 	@GetMapping("/alta")
-	public ResponseEntity<?> listarAlta(){
+	public ResponseEntity<?> listarAlta() {
 		return ResponseEntity.ok().body(service.findAllArticulosManufacturadosAlta());
 	}
-	
+
 	@PutMapping("/dar-de-baja/{id}")
-	public ResponseEntity<?> darDeBaja(@PathVariable Long id){
-		//service.deleteByIdAndBaja(id);
+	public ResponseEntity<?> darDeBaja(@PathVariable Long id) {
+		// service.deleteByIdAndBaja(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
 	}
-	
+
 	@GetMapping("/cantidad-disponible")
-	public ResponseEntity<?> findCantidadDisponible(){
+	public ResponseEntity<?> findCantidadDisponible() {
 		return ResponseEntity.ok().body(service.findCantidadDisponible());
 	}
 }
