@@ -39,4 +39,10 @@ public class UsuarioServiceImpl extends CommonServiceImpl<Usuario, UsuarioReposi
 		}
 	}
 
+	@Override
+	public Optional<Usuario> findByUsuario(String usuario) {
+		// TODO Auto-generated method stub
+		return usuarioRepository.findByUsuario(usuario);
+	}
+
 }
