@@ -40,7 +40,7 @@ public class Pedido {
 	@Column(name= "numero_pedido")
 	private int numeroPedido;
 
-	@FutureOrPresent
+	//@FutureOrPresent
 	@Column(name= "fecha_pedido")
 	private Date fechaPedido;
 
