@@ -21,11 +21,14 @@ import com.commons.controllers.CommonController;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.PreferencePaymentType;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferencePaymentMethodRequest;
 import com.mercadopago.client.preference.PreferencePaymentMethodsRequest;
+import com.mercadopago.client.preference.PreferencePaymentTypeRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
 
 @RestController
@@ -58,17 +61,19 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 				.failure("http://localhost:3000/productos")
 				.pending("http://localhost:3000/productos")
 				.build();
-				
-
+		
+		
+		List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
+			excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("ticket").build());
+		
 		PreferencePaymentMethodsRequest paymentMethods =
 		   PreferencePaymentMethodsRequest.builder()
 		       .installments(3)
+		       .excludedPaymentTypes(excludedPaymentTypes)
 		       .build();
 		
 		PreferenceRequest request = 
-				PreferenceRequest.builder().items(items).backUrls(backUrls).paymentMethods(paymentMethods).build();
-		
-		
+				PreferenceRequest.builder().items(items).backUrls(backUrls).paymentMethods(paymentMethods).autoReturn("approved").build();
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.create(request));
 	} 
