@@ -1,5 +1,6 @@
 package com.buenSabor.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -36,8 +37,10 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
 		
 		//Una vez que encontramos el id reemplazamos el Pedido
 		Pedido pedidoDB = o.get();
-		pedidoDB.setNumeroPedido(pedido.getNumeroPedido()); //ESTAS DOS COSAS SE PUEDEN MODIFICAR?
+		pedidoDB.setNumeroPedido(pedido.getNumeroPedido()); 
 		pedidoDB.setTipoEnvioPedido(pedido.getTipoEnvioPedido());
+		pedidoDB.setEstado(pedido.getEstado());
+		pedidoDB.setEstadoInterno(pedido.getEstadoInterno());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(pedidoDB));		
 	}
@@ -51,5 +54,17 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
 	public ResponseEntity<?> darDeBaja(@PathVariable Long id){
 		//service.deleteByIdAndBaja(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
+	}
+	
+	@GetMapping("/estados")
+	public ResponseEntity<?> listaEstado(){
+		List estadosList = service.getAllEstados();
+		return ResponseEntity.ok().body(estadosList);
+	}
+	
+	@GetMapping("/estados_internos")
+	public ResponseEntity<?> listaEstadosInternos(){
+		List estadosList = service.getAllEstadosInternos();
+		return ResponseEntity.ok().body(estadosList);
 	}
 }

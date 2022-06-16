@@ -51,6 +51,14 @@ public class Pedido {
 	@Column(name= "tipo_envio_pedido")
 	private String tipoEnvioPedido;
 	
+	@NotEmpty
+	@Column(name= "estado")
+	private String estado;
+	
+	@NotEmpty
+	@Column(name= "estado_interno")
+	private String estadoInterno;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "fk_mercado_pago_datos")
 	private MercadoPagoDatos mercadoPagoDatos;
@@ -166,4 +174,21 @@ public class Pedido {
 		this.detallepedidos.remove(detallepedido);
 		detallepedido.setPedido(null);
 	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public String getEstadoInterno() {
+		return estadoInterno;
+	}
+
+	public void setEstadoInterno(String estadoInterno) {
+		this.estadoInterno = estadoInterno;
+	}
+	
 }
