@@ -1,5 +1,7 @@
 package com.buenSabor.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
@@ -9,4 +11,8 @@ public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, L
 
 	@Query("select a from Usuario a where a.fechaBaja is null")
 	public Iterable<Usuario> findAllUsuarioAlta();
+	
+	@Query("select a from Usuario a where a.usuario = ?1")
+	public Optional<Usuario> findByUsuario(String usuario);
+	
 }

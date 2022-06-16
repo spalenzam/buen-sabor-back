@@ -2,6 +2,7 @@ package com.buenSabor.services;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.buenSabor.entity.Cliente;
@@ -14,6 +15,9 @@ import com.commons.services.CommonServiceImpl;
 public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteRepository> implements ClienteService {
 	
 	private final DomicilioService domicilioService;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 	
 
 	public ClienteServiceImpl(DomicilioService domicilioService) {
@@ -60,6 +64,14 @@ public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteReposi
 		save(clienteDB);
 		
 		return clienteDB;
+	}
+
+
+
+	@Override
+	public Optional<Cliente> findByEmail(String email) {
+		
+		return clienteRepository.findByEmail(email);
 	}
 	
 

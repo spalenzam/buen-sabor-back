@@ -36,7 +36,7 @@ public class Cliente {
 	@Email
 	private String email;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "domicilio")
 	private Domicilio domicilio;
 
