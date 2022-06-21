@@ -42,7 +42,7 @@ public class Factura {
 	private int numeroFactura;
 	
 	@Column(name= "monto_descuento")
-	private int montoDescuento;  //ESTO ES INT?
+	private Double montoDescuento;  
 	
 	@Column(name= "forma_pago")
 	private String formaPago;		
@@ -97,10 +97,10 @@ public class Factura {
 	public void setNumeroFactura(int numeroFactura) {
 		this.numeroFactura = numeroFactura;
 	}
-	public int getMontoDescuento() {
+	public Double getMontoDescuento() {
 		return montoDescuento;
 	}
-	public void setMontoDescuento(int montoDescuento) {
+	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
 	public Long getNroTarjeta() {

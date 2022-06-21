@@ -37,7 +37,7 @@ public class ArticuloManufacturadoDetalle {
 	@JoinColumn(name = "fk_articulo_insumo")
 	private ArticuloInsumo articuloinsumo;
 	
-	@JsonIgnoreProperties(value = {"articulomanufacturadodetalle"})
+	//@JsonIgnoreProperties(value = {"articulomanufacturadodetalle"})
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_articulo_manufacturado")
 	private ArticuloManufacturado articulomanufacturado;
