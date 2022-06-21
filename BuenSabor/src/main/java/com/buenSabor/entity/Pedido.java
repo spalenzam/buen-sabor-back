@@ -55,7 +55,6 @@ public class Pedido {
 	@Column(name= "estado")
 	private String estado;
 	
-	@NotEmpty
 	@Column(name= "estado_interno")
 	private String estadoInterno;
 	

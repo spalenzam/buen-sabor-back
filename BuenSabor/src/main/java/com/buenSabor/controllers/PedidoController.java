@@ -1,5 +1,6 @@
 package com.buenSabor.controllers;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
 			return this.validar(result);
 		}	
 		
-		Optional <Pedido> o = service.findById(id);
+		Optional<Pedido> o = service.findById(id);
 		if(o.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
@@ -62,9 +63,26 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
 		return ResponseEntity.ok().body(estadosList);
 	}
 	
-	@GetMapping("/estados_internos")
+	@GetMapping("/estados-internos")
 	public ResponseEntity<?> listaEstadosInternos(){
 		List estadosList = service.getAllEstadosInternos();
 		return ResponseEntity.ok().body(estadosList);
 	}
+	
+	@PutMapping("/cambiar-estados/{id}")
+	public ResponseEntity<?> editarEstados(@Valid @RequestBody Pedido pedido, BindingResult result, @PathVariable Long id){	
+		
+		Optional<Pedido> o = service.findById(id);
+		if(o.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		//Una vez que encontramos el id reemplazamos el Pedido
+		Pedido pedidoDB = o.get();
+		pedidoDB.setEstado(pedido.getEstado() != null ? pedido.getEstado() : pedidoDB.getEstado());
+		pedidoDB.setEstadoInterno(pedido.getEstadoInterno() != null ? pedido.getEstadoInterno() : pedidoDB.getEstadoInterno());
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(pedidoDB));		
+	}
+
 }
