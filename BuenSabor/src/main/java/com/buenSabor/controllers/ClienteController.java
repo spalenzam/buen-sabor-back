@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,6 +40,7 @@ public class ClienteController extends CommonController<Cliente, ClienteService>
 			return this.validar(result);
 		}
 
+		//Optional<Cliente> o = service.findById(id);
 		Optional<Cliente> o = service.findById(id);
 		if (o.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -87,5 +89,14 @@ public class ClienteController extends CommonController<Cliente, ClienteService>
 			return ResponseEntity.status(HttpStatus.CREATED).body(clienteOptional.get());
 
 		}
+	}
+	
+	@GetMapping("/cliente/{email}")
+	public ResponseEntity<?> obtenerCliente (@PathVariable String email){
+		Optional<Cliente> o = service.findByEmail(email);
+		if(o.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(o.get());
 	}
 }

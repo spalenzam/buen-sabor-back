@@ -33,16 +33,16 @@ public class DetallePedido {
 	@Column(name = "subtotal")
 	private double subtotal;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_articulo_manufacturado")
 	private ArticuloManufacturado articulomanufacturado;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_articulo_insumo")
 	private ArticuloInsumo articuloinsumo;
 	
 	@JsonIgnoreProperties (value = {"detallepedidos"})
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_pedido")
 	private Pedido pedido;
 
