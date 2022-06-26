@@ -32,7 +32,6 @@ public class Factura {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@FutureOrPresent
 	@Column(name= "fecha_factura")
 	private Date fechaFactura;
 	
@@ -47,9 +46,8 @@ public class Factura {
 	@Column(name= "forma_pago")
 	private String formaPago;		
 	
-	@CreditCardNumber
 	@Column(name= "nro_tarjeta")
-	private Long nroTarjeta;
+	private String nroTarjeta;
 	
 	@Column(name= "total_venta")
 	private Double totalVenta;
@@ -57,7 +55,7 @@ public class Factura {
 	@Column(name= "total_costo")
 	private Double totalCosto;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne()
 	@JoinColumn(name = "fk_pedido")
 	private Pedido pedido;
 	
@@ -103,10 +101,10 @@ public class Factura {
 	public void setMontoDescuento(Double montoDescuento) {
 		this.montoDescuento = montoDescuento;
 	}
-	public Long getNroTarjeta() {
+	public String getNroTarjeta() {
 		return nroTarjeta;
 	}
-	public void setNroTarjeta(Long nroTarjeta) {
+	public void setNroTarjeta(String nroTarjeta) {
 		this.nroTarjeta = nroTarjeta;
 	}
 	public Date getCreatedAt() {

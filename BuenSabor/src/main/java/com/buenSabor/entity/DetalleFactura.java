@@ -31,18 +31,18 @@ public class DetalleFactura {
 	@Min(1)
 	@NotNull
 	@Column(name = "subtotal")
-	private double subtotal;
+	private Double subtotal;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne()
 	@JoinColumn(name = "fk_articulo_manufacturado")
 	private ArticuloManufacturado articulomanufacturado;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne()
 	@JoinColumn(name = "fk_articulo_insumo")
 	private ArticuloInsumo articuloinsumo;
 
 	@JsonIgnoreProperties(value = {"detallefacturas"})
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "fk_factura")
 	private Factura factura;
 	
@@ -62,11 +62,11 @@ public class DetalleFactura {
 		this.cantidad = cantidad;
 	}
 
-	public double getSubtotal() {
+	public Double getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(double subtotal) {
+	public void setSubtotal(Double subtotal) {
 		this.subtotal = subtotal;
 	}
 
