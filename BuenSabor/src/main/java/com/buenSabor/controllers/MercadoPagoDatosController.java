@@ -21,12 +21,10 @@ import com.commons.controllers.CommonController;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.preference.PreferencePaymentType;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferencePaymentMethodRequest;
 import com.mercadopago.client.preference.PreferencePaymentMethodsRequest;
 import com.mercadopago.client.preference.PreferencePaymentTypeRequest;
 import com.mercadopago.client.preference.PreferenceRequest;
@@ -36,10 +34,10 @@ import com.mercadopago.client.preference.PreferenceRequest;
 public class MercadoPagoDatosController extends CommonController<MercadoPagoDatos, MercadoPagoDatosService> {
 
 	@Autowired
-	protected MercadoPagoDatosServiceImpl mercadoPagoDatosService;
+	protected MercadoPagoDatosServiceImpl mercadoPagoDatosService; 
 	
-	@PostMapping("/payment")
-	public ResponseEntity<?> processPayment(@RequestBody DetallePedidoDTO detpedido) throws MPException, MPApiException {
+	@PostMapping("/preference")
+	public ResponseEntity<?> preference(@RequestBody DetallePedidoDTO detpedido) throws MPException, MPApiException {
 		MercadoPagoConfig.setAccessToken("TEST-5308942090062149-050414-517f77a9e02222eef1cd89f17966b93f-447851281");
 		
 		// Crea un objeto de preferencia
@@ -57,14 +55,16 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		
 		PreferenceBackUrlsRequest backUrls = 
 				PreferenceBackUrlsRequest.builder()
-				.success("http://localhost:3000/productos")
+				.success("http://localhost:3000/tienda")
 				.failure("http://localhost:3000/productos")
 				.pending("http://localhost:3000/productos")
 				.build();
 		
 		
 		List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
-			excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("ticket").build());
+			excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder()
+					.id("ticket")
+					.build());
 		
 		PreferencePaymentMethodsRequest paymentMethods =
 		   PreferencePaymentMethodsRequest.builder()
@@ -73,7 +73,13 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		       .build();
 		
 		PreferenceRequest request = 
-				PreferenceRequest.builder().items(items).backUrls(backUrls).paymentMethods(paymentMethods).autoReturn("approved").build();
+				PreferenceRequest.builder()
+				.items(items)
+				.backUrls(backUrls)
+				.autoReturn("approved")
+				.binaryMode(true)
+				.paymentMethods(paymentMethods)
+				.build();	
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.create(request));
 	} 
