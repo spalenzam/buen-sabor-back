@@ -164,15 +164,15 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
 
             // lo graba a disco
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "c://temp" + File.separator + "factura.pdf");
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "c://temp" + File.separator + "factura " + factura.getNumeroFactura() +".pdf");
 
-            return null;
+            //return null;
 
             //Brinda el PDF para que se pueda mostrar
-           /* ByteArrayOutputStream out = new ByteArrayOutputStream();
+           ByteArrayOutputStream out = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
 
-            return new ByteArrayInputStream(out.toByteArray());*/
+            return new ByteArrayInputStream(out.toByteArray());
 
         } catch (JRException ex) {
             log.error(ex.getMessage());
