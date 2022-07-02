@@ -4,11 +4,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.buenSabor.entity.ArticuloInsumo;
+import com.buenSabor.entity.ArticuloManufacturadoDetalle;
 import com.buenSabor.repository.ArticuloInsumoRepository;
 import com.buenSabor.services.errors.BuenSaborException;
 import com.buenSabor.services.errors.ErrorConstants;
@@ -21,6 +23,15 @@ public class ArticuloInsumoServiceImpl extends CommonServiceImpl<ArticuloInsumo,
 	@Autowired
 	private ArticuloInsumoRepository articuloInsumoRepository;
 	
+	private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
+
+	
+	public ArticuloInsumoServiceImpl(ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService) {
+		super();
+		this.articuloManufacturadoDetalleService = articuloManufacturadoDetalleService;
+	}
+	
+
 	@Override
 	public Iterable<ArticuloInsumo> findAllArticulosAlta() {
 		return articuloInsumoRepository.findAllAlta();
@@ -32,6 +43,12 @@ public class ArticuloInsumoServiceImpl extends CommonServiceImpl<ArticuloInsumo,
 		Optional<ArticuloInsumo> articuloInsumoOptional = findById(id);
 		
 		if(articuloInsumoOptional.isPresent()){
+			
+			List<ArticuloManufacturadoDetalle> detalles = articuloManufacturadoDetalleService.findByArticuloInsumo(articuloInsumoOptional.get());
+			
+			for(ArticuloManufacturadoDetalle a : detalles) {
+				articuloManufacturadoDetalleService.deleteById(a.getId());
+			}
 			
 			articuloInsumoOptional.get().setFechaBaja(new Date());
 			save(articuloInsumoOptional.get()); 

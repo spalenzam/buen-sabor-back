@@ -2,7 +2,6 @@ package com.buenSabor.entity;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +40,7 @@ public class ArticuloInsumo {
 	
 	@Min(1)
 	@NotNull
-	@Column(name = "stock_actul")
+	@Column(name = "stock_actual")
 	private double stockActual;
 	
 	@Min(1)
@@ -60,7 +59,7 @@ public class ArticuloInsumo {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaBaja;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne()
 	@JoinColumn(name = "fk_rubro_articulo")
 	private RubroArticulo rubroarticulo;
 
