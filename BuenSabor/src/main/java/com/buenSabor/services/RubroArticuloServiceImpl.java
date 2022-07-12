@@ -29,6 +29,8 @@ public class RubroArticuloServiceImpl extends CommonServiceImpl<RubroArticulo, R
 	@Override
 	public RubroArticulo deleteByIdAndBaja(Long id) {
 		Optional<RubroArticulo> rubroArticuloOptional = findById(id);
+		
+		System.out.println(rubroArticuloOptional.get().getId());
 
 		if (rubroArticuloOptional.isPresent()) {
 			
@@ -40,9 +42,11 @@ public class RubroArticuloServiceImpl extends CommonServiceImpl<RubroArticulo, R
 				
 				return rubroArticuloOptional.get();
 			}else {
+				
 				//Busco los hijos
-				List<RubroArticulo> rubroArticuloHijosList = rubroArticuloRepository.findHijos(rubroArticuloOptional.get().getId());
-		
+				//List<RubroArticulo> rubroArticuloHijosList = rubroArticuloRepository.findHijos(rubroArticuloOptional.get().getId());
+				List<RubroArticulo> rubroArticuloHijosList = rubroArticuloOptional.get().getRubroarticuloHijos();
+				
 				//recorro la lista y los voy eliminando
 				for(RubroArticulo rubroArticulo : rubroArticuloHijosList) {
 					rubroArticulo.setFechaBaja(new Date());

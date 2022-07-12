@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.buenSabor.entity.ArticuloInsumo;
 import com.buenSabor.entity.ArticuloManufacturado;
 import com.buenSabor.entity.ArticuloManufacturadoDetalle;
 import com.buenSabor.repository.ArticuloManufacturadoDetalleRepository;
@@ -16,14 +17,7 @@ public class ArticuloManufacturadoDetalleServiceImpl extends CommonServiceImpl<A
 	
 	@Autowired
 	ArticuloManufacturadoDetalleRepository articuloManufacturadoDetalleRepository;
-	
-	private final ArticuloInsumoService articuloInsumoService;
-	
 
-	public ArticuloManufacturadoDetalleServiceImpl(ArticuloInsumoService articuloInsumoService) {
-		super();
-		this.articuloInsumoService = articuloInsumoService;
-	}
 
 	@Override
 	public List<ArticuloManufacturadoDetalle> findByArticuloManufacturado(ArticuloManufacturado a) {
@@ -50,6 +44,12 @@ public class ArticuloManufacturadoDetalleServiceImpl extends CommonServiceImpl<A
 		
 		
 		return artmanufacturadodetalleDB;
+	}
+	
+	@Override
+	public List<ArticuloManufacturadoDetalle> findByArticuloInsumo(ArticuloInsumo a) {
+		// TODO Auto-generated method stub
+		return articuloManufacturadoDetalleRepository.findByArticuloInsumo(a);
 	}
 
 }

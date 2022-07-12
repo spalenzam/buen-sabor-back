@@ -34,10 +34,14 @@ public class ArticuloInsumoController extends CommonController<ArticuloInsumo, A
 		}
 		
 		ArticuloInsumo articuloinsumoDB = o.get();
+		articuloinsumoDB.setDenominacion(articuloinsumo.getDenominacion());
+		articuloinsumoDB.setEsInsumo(articuloinsumo.isEsInsumo());
 		articuloinsumoDB.setPrecioCompra(articuloinsumo.getPrecioCompra());
 		articuloinsumoDB.setPrecioVenta(articuloinsumo.getPrecioVenta());
 		articuloinsumoDB.setStockActual(articuloinsumo.getStockActual());
 		articuloinsumoDB.setStockMinimo(articuloinsumo.getStockMinimo());
+		articuloinsumoDB.setUnidadMedida(articuloinsumo.getUnidadMedida());
+		articuloinsumoDB.setRubroarticulo(articuloinsumo.getRubroarticulo());
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(articuloinsumoDB));
 	}

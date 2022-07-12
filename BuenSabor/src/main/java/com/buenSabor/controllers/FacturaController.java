@@ -1,6 +1,8 @@
 package com.buenSabor.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -16,18 +18,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.buenSabor.entity.Factura;
 import com.buenSabor.entity.Pedido;
 import com.buenSabor.services.FacturaService;
 import com.buenSabor.services.PedidoService;
+import com.buenSabor.services.dto.IngresosDiarioYMensualDTO;
+import com.buenSabor.services.dto.RakingComidasDTO;
 import com.buenSabor.services.errors.BuenSaborException;
 import com.buenSabor.services.errors.ErrorConstants;
 import com.commons.controllers.CommonController;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @RestController
 @RequestMapping(path = "api/buensabor/facturas")
@@ -111,5 +117,34 @@ public class FacturaController extends CommonController<Factura, FacturaService>
 		 * .contentType(MediaType.APPLICATION_PDF) .body(new
 		 * InputStreamResource(facturaPDF));
 		 */
+	}
+	
+	@GetMapping("/ingreso-mensual")
+	public ResponseEntity<?> ingresoMensual(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha) {
+		
+		System.out.println(fecha);
+		
+		//System.out.println(desde +""+ hasta);
+		IngresosDiarioYMensualDTO ingresoMensual = service.ingresoMensual(fecha);
+		
+		return ResponseEntity.ok().body(ingresoMensual);
+	}
+	
+	@GetMapping("/ingreso-diario")
+	public ResponseEntity<?> ingresoDiario(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha) {
+		
+		//System.out.println(desde +""+ hasta);
+		IngresosDiarioYMensualDTO ingresoDiario = service.ingresoDiario(fecha);
+		
+		return ResponseEntity.ok().body(ingresoDiario);
+	}
+	
+	@GetMapping("/ganancias")
+	public ResponseEntity<?> ganancias(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date desde, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date hasta) {
+		
+		//System.out.println(desde +""+ hasta);
+		Double ganancia = service.gananciasPorFecha(desde, hasta);
+		
+		return ResponseEntity.ok().body(ganancia);
 	}
 }
