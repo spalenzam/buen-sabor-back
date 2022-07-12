@@ -36,12 +36,12 @@ public class RubroArticulo {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaBaja;
 	
-	@JsonIgnoreProperties(value= {"rubroarticuloHijos"})
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+	//@JsonIgnoreProperties(value= {"rubroarticuloHijos"})
+	@ManyToOne()
 	private RubroArticulo rubroarticuloPadre;
 	
 	@JsonIgnoreProperties(value= {"rubroarticuloPadre"})
-	@OneToMany(fetch = FetchType.LAZY, mappedBy ="rubroarticuloPadre", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy ="rubroarticuloPadre")
 	private List<RubroArticulo> rubroarticuloHijos;
 	
 	public RubroArticulo() {

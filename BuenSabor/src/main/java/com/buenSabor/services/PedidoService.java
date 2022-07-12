@@ -1,8 +1,10 @@
 package com.buenSabor.services;
 
+import java.util.Date;
 import java.util.List;
 
 import com.buenSabor.entity.Pedido;
+import com.buenSabor.services.dto.PedidosPorClienteDTO;
 import com.commons.services.CommonService;
 
 public interface PedidoService extends CommonService<Pedido>{
@@ -14,5 +16,7 @@ public interface PedidoService extends CommonService<Pedido>{
 	List getAllEstados();
 	
 	List getAllEstadosInternos();
+
+	List<PedidosPorClienteDTO> listarPedidosPorCliente(Date desde, Date hasta);
 	
 }

@@ -2,9 +2,6 @@ package com.buenSabor.services;
 
 
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +13,7 @@ import com.buenSabor.entity.Factura;
 import com.buenSabor.repository.FacturaRepository;
 import com.buenSabor.services.dto.DetalleFacturaDTO;
 import com.buenSabor.services.dto.FacturaDTO;
+import com.buenSabor.services.dto.IngresosDiarioYMensualDTO;
 import com.buenSabor.services.errors.BuenSaborException;
 import com.buenSabor.services.errors.ErrorConstants;
 import com.commons.services.CommonServiceImpl;
@@ -182,6 +180,76 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
             throw e;
         }
     }
+	
+
+	@Override
+	public IngresosDiarioYMensualDTO ingresoMensual(Date date) {
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int month = cal.get(Calendar.MONTH)+1;
+		int year = cal.get(Calendar.YEAR);
+		
+		System.out.println(date);
+		
+		List<Factura> facturas = repository.ingresosMensuales(month, year);
+		
+		Double total = 0.0;
+		
+		for(Factura factura : facturas) {
+			total += factura.getTotalVenta();
+			
+			System.out.println(factura.getTotalVenta());
+		}
+		
+		IngresosDiarioYMensualDTO ingresosDiarioYMensualDTO = new IngresosDiarioYMensualDTO();
+		ingresosDiarioYMensualDTO.setFactura(facturas);
+		ingresosDiarioYMensualDTO.setIngreso(total);
+		
+		return ingresosDiarioYMensualDTO;
+	}
+
+	@Override
+	public IngresosDiarioYMensualDTO ingresoDiario(Date fecha) {
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fecha);
+		int month = cal.get(Calendar.MONTH)+1;
+		int year = cal.get(Calendar.YEAR);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		System.out.println(month);
+		System.out.println(year);
+		System.out.println(day);
+		
+		List<Factura> facturas = repository.ingresosDiarios(month, year, day);
+		
+		Double total = 0.0;
+		
+		for(Factura factura : facturas) {
+			total += factura.getTotalVenta();
+			
+			System.out.println(factura.getTotalVenta());
+		}
+		
+		IngresosDiarioYMensualDTO ingresosDiarioYMensualDTO = new IngresosDiarioYMensualDTO();
+		ingresosDiarioYMensualDTO.setFactura(facturas);
+		ingresosDiarioYMensualDTO.setIngreso(total);
+		
+		return ingresosDiarioYMensualDTO;
+	}
+
+	@Override
+	public Double gananciasPorFecha(Date desde, Date hasta) {
+		List<Factura> facturas = facturaRepository.facturasPorFecha(desde, hasta);
+		
+		Double gananciasDouble = 0.0;
+		
+		for(Factura factura : facturas) {
+			gananciasDouble = gananciasDouble + (factura.getTotalVenta() - factura.getTotalCosto());
+		}
+		
+		return gananciasDouble;
+	}
 
 
 }

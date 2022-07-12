@@ -36,6 +36,10 @@ public class RubroArticuloController extends CommonController<RubroArticulo, Rub
 		
 		RubroArticulo rubroarticuloDB = o.get();
 		rubroarticuloDB.setDenominacion(rubroarticulo.getDenominacion());
+		if(rubroarticulo.getRubroarticuloPadre() != null) {
+			rubroarticuloDB.setRubroarticuloPadre(rubroarticulo.getRubroarticuloPadre());
+		}
+		
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(rubroarticuloDB));
 	}
