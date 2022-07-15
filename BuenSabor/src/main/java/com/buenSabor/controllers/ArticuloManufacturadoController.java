@@ -202,4 +202,19 @@ public class ArticuloManufacturadoController
 	public ResponseEntity<?> findCantidadDisponible() {
 		return ResponseEntity.ok().body(service.findCantidadDisponible());
 	}
+	
+	@GetMapping("/imagen/{id}")
+	public ResponseEntity<?> imagenRubro(@PathVariable Long id){
+		Resource imagen = null ;
+		Iterable<ArticuloManufacturado> artManufacturados = service.findImagenRubro(id); 
+		
+		for(ArticuloManufacturado artManuf : artManufacturados) {
+			if (artManuf.getImagen() != null) {
+				imagen = new ByteArrayResource(artManuf.getImagen());
+				break;
+			}
+		}
+
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imagen);
+	}
 }

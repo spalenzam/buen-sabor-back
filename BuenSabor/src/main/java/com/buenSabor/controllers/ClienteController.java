@@ -47,10 +47,10 @@ public class ClienteController extends CommonController<Cliente, ClienteService>
 		}
 
 		// con el id se reemplaza el cliente
-		// Cliente clienteDB = o.get();
-		// clienteDB.setNombre(clienteDB.getNombre());
-		// clienteDB.setApellido(cliente.getApellido());
-		// clienteDB.setTelefono(cliente.getTelefono());
+		//Cliente clienteDB = o.get();
+		//clienteDB.setNombre(clienteDB.getNombre());
+		//clienteDB.setApellido(cliente.getApellido());
+		//clienteDB.setTelefono(cliente.getTelefono());
 
 		Cliente clienteDB = service.updateCliente(cliente, id);
 
@@ -97,6 +97,7 @@ public class ClienteController extends CommonController<Cliente, ClienteService>
 		if(o.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
+		
 		return ResponseEntity.ok(o.get());
 	}
 }

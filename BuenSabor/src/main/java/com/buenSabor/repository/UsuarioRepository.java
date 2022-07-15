@@ -14,5 +14,4 @@ public interface UsuarioRepository extends PagingAndSortingRepository<Usuario, L
 	
 	@Query("select a from Usuario a where a.usuario = ?1")
 	public Optional<Usuario> findByUsuario(String usuario);
-	
 }

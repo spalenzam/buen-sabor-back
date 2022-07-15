@@ -103,4 +103,13 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 
 		}
 	}
+	
+	@GetMapping("/usuario/{email}")
+	public ResponseEntity<?> obtenerUsuario (@PathVariable String email){
+		Optional<Usuario> o = service.findByUsuario(email);
+		if(o.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(o.get());
+	}
 }

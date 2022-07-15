@@ -11,4 +11,6 @@ public interface DetallePedidoService extends CommonService<DetallePedido> {
 	
 	List<RakingComidasDTO> rankingDeComidas(Date desde, Date hasta);
 
+	Iterable<DetallePedido> findDetPedidos(Long id);
+	
 }

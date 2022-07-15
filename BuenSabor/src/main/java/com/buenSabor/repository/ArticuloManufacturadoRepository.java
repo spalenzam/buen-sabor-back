@@ -10,4 +10,6 @@ public interface ArticuloManufacturadoRepository extends PagingAndSortingReposit
 	@Query("select a from ArticuloManufacturado a where a.fechaBaja is null")
 	public Iterable<ArticuloManufacturado> findAllArticulosManufacturadosAlta();
 
+	@Query("select a from ArticuloManufacturado a where fk_rubro_general = ?1")
+	public Iterable<ArticuloManufacturado> findByfkRubro(Long id);
 }
