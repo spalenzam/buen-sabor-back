@@ -23,7 +23,6 @@ public class ArticuloManufacturadoServiceImpl extends CommonServiceImpl<Articulo
 	
 	private final ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService;
 	
-	
 
 	public ArticuloManufacturadoServiceImpl(ArticuloManufacturadoRepository articuloManufacturadoRepository,
 			ArticuloManufacturadoDetalleService articuloManufacturadoDetalleService) {
@@ -91,6 +90,12 @@ public class ArticuloManufacturadoServiceImpl extends CommonServiceImpl<Articulo
 		}
 		
 		return articulosArticuloManufacturadoDTOList;
+	}
+	
+	@Override
+	public Iterable<ArticuloManufacturado> findImagenRubro(Long id) {
+		
+		return articuloManufacturadoRepository.findByfkRubro(id);
 	}
 
 }

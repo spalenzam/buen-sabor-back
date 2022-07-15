@@ -33,7 +33,7 @@ public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteReposi
 		Optional<Cliente> o = findById(id);
 		if(o.isEmpty()) {
 			throw new BuenSaborException("Cliente", "Cliente no encontrado");
-		}
+ 		}
 		
 		//con el id se reemplaza el cliente
 		Cliente clienteDB = o.get();

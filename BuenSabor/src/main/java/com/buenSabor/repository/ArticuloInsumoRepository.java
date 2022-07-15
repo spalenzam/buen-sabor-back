@@ -8,5 +8,5 @@ public interface ArticuloInsumoRepository extends PagingAndSortingRepository<Art
 
 	@Query("select a from ArticuloInsumo a where a.fechaBaja is null")
 	public Iterable<ArticuloInsumo> findAllAlta();
-
+	
 }

@@ -1,12 +1,16 @@
 package com.buenSabor.services;
 
 
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,23 @@ import com.commons.services.CommonServiceImpl;
 
 @Service
 public class DetallePedidoServiceImpl extends CommonServiceImpl<DetallePedido, DetallePedidoRepository> implements DetallePedidoService{
+	
+	private final ArticuloInsumoService articuloInsumoService;
+		
+	@Autowired
+	private DetallePedidoRepository detPedidoRepository;
+	
+	public DetallePedidoServiceImpl(ArticuloInsumoService articuloInsumoService) {
+		super();
+		this.articuloInsumoService = articuloInsumoService;
+	}
+	
+	@Override
+	public Iterable<DetallePedido> findDetPedidos(Long id) {
+			
+		return detPedidoRepository.findByfkPedido(id);
+	}
+
 
 	@Override
 	public List<RakingComidasDTO> rankingDeComidas(Date desde, Date hasta) {

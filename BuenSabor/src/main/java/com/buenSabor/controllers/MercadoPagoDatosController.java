@@ -21,7 +21,12 @@ import com.commons.controllers.CommonController;
 
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.payment.Payment;
+import com.mercadopago.resources.preference.Preference;
 import com.mercadopago.MercadoPagoConfig;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.client.payment.PaymentCreateRequest;
+import com.mercadopago.client.payment.PaymentItemRequest;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -44,7 +49,6 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		PreferenceClient client = new PreferenceClient();
 		
 		List<PreferenceItemRequest> items = new ArrayList<>();
-		
 			PreferenceItemRequest item =
 			   PreferenceItemRequest.builder()
 			       .title(detpedido.getDescripcion())
@@ -79,6 +83,8 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 				.autoReturn("approved")
 				.binaryMode(true)
 				.paymentMethods(paymentMethods)
+				.notificationUrl("https://webhook.site/cf43d7eb-b66c-4bc1-9385-342a65202e76")
+				//.notificationUrl("https://hookb.in/QJyMDDQmN7T8G218WN2j")
 				.build();	
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.create(request));

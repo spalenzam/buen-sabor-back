@@ -56,5 +56,5 @@ public class ArticuloInsumoController extends CommonController<ArticuloInsumo, A
 		//service.deleteByIdAndBaja(id);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.deleteByIdAndBaja(id));
 	}
-
+	
 }
