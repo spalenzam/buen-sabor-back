@@ -71,7 +71,7 @@ public class Pedido {
 	private Cliente cliente;
 	
 	@Column(name = "fecha_baja")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date fechaBaja;
 	
 	@JsonIgnoreProperties(value = {"pedido"}, allowSetters = true)

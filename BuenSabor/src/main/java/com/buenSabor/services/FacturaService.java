@@ -19,8 +19,14 @@ public interface FacturaService extends CommonService<Factura> {
 	public ByteArrayInputStream generarFacturaPDF(Factura factura) throws Exception;
 
 	public IngresosDiarioYMensualDTO ingresoMensual(Date date);
+	
+	ByteArrayInputStream generarExcelIngresoMensual(IngresosDiarioYMensualDTO ingresosDiarioYMensualDTO , Date date) throws Exception;
 
 	public IngresosDiarioYMensualDTO ingresoDiario(Date fecha);
+	
+	ByteArrayInputStream generarExcelIngresoDiario(IngresosDiarioYMensualDTO ingresosDiarioYMensualDTO , Date date) throws Exception;
 
-	public Double gananciasPorFecha(Date desde, Date hasta);
+	public IngresosDiarioYMensualDTO gananciasPorFecha(Date desde, Date hasta);
+	
+	ByteArrayInputStream generarExcelGananciasPorFecha(IngresosDiarioYMensualDTO ingresosDiarioYMensualDTO, Date desde, Date hasta) throws Exception;
 }

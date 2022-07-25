@@ -1,14 +1,19 @@
 package com.buenSabor.controllers;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.buenSabor.entity.Pedido;
 import com.buenSabor.services.PedidoService;
+import com.buenSabor.services.dto.IngresosDiarioYMensualDTO;
 import com.buenSabor.services.dto.PedidosPorClienteDTO;
 import com.buenSabor.services.dto.RakingComidasDTO;
 import com.commons.controllers.CommonController;
@@ -98,5 +104,20 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
 		
 		return ResponseEntity.ok().body(listaPedidos);
 	}
+	
+	@GetMapping("/pedidos/generar-excel")
+    public ResponseEntity<Resource> pedidosPorClienteExcel(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date desde, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date hasta) throws Exception {
+        
+		List<PedidosPorClienteDTO> listaPedidos = service.listarPedidosPorCliente(desde, hasta);
+
+        String filename = "Pedidos-por-cliente-" + LocalDate.now() + ".xlsx";
+
+        InputStreamResource file = new InputStreamResource(service.generarExcelPedidosPorCliente(listaPedidos, desde, hasta));
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(file);
+    }
 
 }
