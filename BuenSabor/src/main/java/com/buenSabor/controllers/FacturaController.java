@@ -1,6 +1,7 @@
 package com.buenSabor.controllers;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -130,6 +131,21 @@ public class FacturaController extends CommonController<Factura, FacturaService>
 		return ResponseEntity.ok().body(ingresoMensual);
 	}
 	
+	@GetMapping("/ingreso-mensual/generar-excel")
+    public ResponseEntity<Resource> ingresoMensualExcel(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha) throws Exception {
+        
+		IngresosDiarioYMensualDTO ingresoMensual = service.ingresoMensual(fecha);
+
+        String filename = "Ingreso-Mensual-" + LocalDate.now() + ".xlsx";
+
+        InputStreamResource file = new InputStreamResource(service.generarExcelIngresoMensual(ingresoMensual, fecha));
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(file);
+    }
+	
 	@GetMapping("/ingreso-diario")
 	public ResponseEntity<?> ingresoDiario(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha) {
 		
@@ -139,12 +155,42 @@ public class FacturaController extends CommonController<Factura, FacturaService>
 		return ResponseEntity.ok().body(ingresoDiario);
 	}
 	
+	@GetMapping("/ingreso-diario/generar-excel")
+    public ResponseEntity<Resource> ingresoDiarioExcel(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha) throws Exception {
+        
+		IngresosDiarioYMensualDTO ingresoDiario = service.ingresoDiario(fecha);
+
+        String filename = "Ingreso-Diario-" + LocalDate.now() + ".xlsx";
+
+        InputStreamResource file = new InputStreamResource(service.generarExcelIngresoDiario(ingresoDiario, fecha));
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(file);
+    }
+	
 	@GetMapping("/ganancias")
 	public ResponseEntity<?> ganancias(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date desde, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date hasta) {
 		
 		//System.out.println(desde +""+ hasta);
-		Double ganancia = service.gananciasPorFecha(desde, hasta);
+		IngresosDiarioYMensualDTO ingresoDiario = service.gananciasPorFecha(desde, hasta);
 		
-		return ResponseEntity.ok().body(ganancia);
+		return ResponseEntity.ok().body(ingresoDiario);
 	}
+	
+	@GetMapping("/ganancias/generar-excel")
+    public ResponseEntity<Resource> gananciasExcel(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date desde, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date hasta) throws Exception {
+        
+		IngresosDiarioYMensualDTO ingresoDiario = service.gananciasPorFecha(desde, hasta);
+
+        String filename = "Ganancias-" + LocalDate.now() + ".xlsx";
+
+        InputStreamResource file = new InputStreamResource(service.generarExcelGananciasPorFecha(ingresoDiario, desde, hasta));
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(file);
+    }
 }

@@ -1,13 +1,18 @@
 package com.buenSabor.controllers;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -92,6 +97,22 @@ public class DetallePedidoController extends CommonController<DetallePedido, Det
 		}
 		return ResponseEntity.ok().body(service.findDetPedidos(id));
 	}
+	
+	
+	@GetMapping("/ranking/generar-excel")
+    public ResponseEntity<Resource> rankingExcel(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date desde, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date hasta) throws Exception {
+        
+        List<RakingComidasDTO> listaComidasDTOs = service.rankingDeComidas(desde, hasta);
+
+        String filename = "Ranking-Comidas-" + LocalDate.now() + ".xlsx";
+
+        InputStreamResource file = new InputStreamResource(service.generarExcelRanking(listaComidasDTOs, desde, hasta));
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+            .body(file);
+    }
 
 
 }
