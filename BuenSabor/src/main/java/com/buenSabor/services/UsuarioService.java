@@ -12,4 +12,6 @@ public interface UsuarioService extends CommonService<Usuario> {
 	Usuario deleteByIdAndBaja(Long id);
 	
 	Optional<Usuario> findByUsuario(String usuario);
+
+	void findConfiguracionAndUpdate();
 }

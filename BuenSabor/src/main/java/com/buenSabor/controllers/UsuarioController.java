@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.buenSabor.entity.Configuracion;
 import com.buenSabor.entity.Domicilio;
 import com.buenSabor.entity.Usuario;
 import com.buenSabor.services.ClienteService;
@@ -111,5 +112,18 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(o.get());
+	}
+	
+	@PostMapping("/conCocinero")
+	public ResponseEntity<?> crearConCocinero(@Valid @RequestBody Usuario entity, BindingResult result){ //Binding.. -> A través del resultado obtenemos los msj de error, y tiene que ir justo dsp del request body 
+		
+		if(result.hasErrors()) {
+			return this.validar(result);
+		}		
+		Usuario entityDB = service.save(entity);
+		
+		service.findConfiguracionAndUpdate();
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(entityDB);
 	}
 }

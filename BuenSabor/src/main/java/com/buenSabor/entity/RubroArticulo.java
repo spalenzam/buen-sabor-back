@@ -40,8 +40,8 @@ public class RubroArticulo {
 	@ManyToOne()
 	private RubroArticulo rubroarticuloPadre;
 	
-	@JsonIgnoreProperties(value= {"rubroarticuloPadre"})
-	@OneToMany(mappedBy ="rubroarticuloPadre")
+	@JsonIgnoreProperties(value = {"rubroarticuloPadre"}, allowSetters = true)
+	@OneToMany(mappedBy = "rubroarticuloPadre", fetch = FetchType.EAGER)
 	private List<RubroArticulo> rubroarticuloHijos;
 	
 	public RubroArticulo() {
