@@ -33,7 +33,6 @@ public class MercadoPagoDatos {
 	@Column(name= "metodo_pago")
 	private String metodoPago;
 	
-	@NotEmpty
 	@Column(name= "nro_tarjeta")
 	private String nroTarjeta;
 	

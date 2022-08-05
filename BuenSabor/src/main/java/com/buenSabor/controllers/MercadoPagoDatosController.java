@@ -3,11 +3,17 @@ package com.buenSabor.controllers;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,9 +65,9 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 		
 		PreferenceBackUrlsRequest backUrls = 
 				PreferenceBackUrlsRequest.builder()
-				.success("http://localhost:3000/tienda")
-				.failure("http://localhost:3000/productos")
-				.pending("http://localhost:3000/productos")
+				.success("http://localhost:3000/compra")
+				.failure("http://localhost:3000/compra")
+				.pending("http://localhost:3000/compra")
 				.build();
 		
 		
@@ -83,10 +89,32 @@ public class MercadoPagoDatosController extends CommonController<MercadoPagoDato
 				.autoReturn("approved")
 				.binaryMode(true)
 				.paymentMethods(paymentMethods)
-				.notificationUrl("https://webhook.site/cf43d7eb-b66c-4bc1-9385-342a65202e76")
+				//.notificationUrl("https://webhook.site/cf43d7eb-b66c-4bc1-9385-342a65202e76")
 				//.notificationUrl("https://hookb.in/QJyMDDQmN7T8G218WN2j")
 				.build();	
 		
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(client.create(request));
 	} 
+	
+	@PutMapping("/{identificadorPago}")
+	public ResponseEntity<?> editar(@Valid @RequestBody MercadoPagoDatos mercadopago, BindingResult result, @PathVariable Long identificadorPago){
+		
+		if(result.hasErrors()) {
+			return this.validar(result);
+		}	
+		
+		Optional<MercadoPagoDatos> o = service.findById(identificadorPago);
+		if(o.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		MercadoPagoDatos mercadopagoDB = o.get();
+		mercadopagoDB.setEstado(mercadopago.getEstado());
+		mercadopagoDB.setFechaAprobacion(mercadopago.getFechaAprobacion());
+		mercadopagoDB.setFormaPago(mercadopago.getFormaPago());
+		mercadopagoDB.setMetodoPago(mercadopago.getMetodoPago());
+		mercadopagoDB.setNroTarjeta(mercadopago.getNroTarjeta());
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.save(mercadopagoDB));		
+	}
 }

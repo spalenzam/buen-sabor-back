@@ -21,5 +21,6 @@ public interface PedidoService extends CommonService<Pedido>{
 	List<PedidosPorClienteDTO> listarPedidosPorCliente(Date desde, Date hasta);
 
 	InputStream generarExcelPedidosPorCliente(List<PedidosPorClienteDTO> listaPedidos, Date desde, Date hasta);
-	
+
+	Pedido ultimoPedido();
 }

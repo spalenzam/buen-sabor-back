@@ -16,5 +16,5 @@ public interface PedidoRepository extends PagingAndSortingRepository<Pedido, Lon
 	@Query(value = "SELECT * FROM pedidos p WHERE p.fecha_pedido BETWEEN ?1 AND ?2 ", nativeQuery = true)
 	public List<Pedido> pedidosPorFecha(Date desde, Date hasta);
 	
-	
+	public Pedido findTopByOrderByIdDesc();
 }
