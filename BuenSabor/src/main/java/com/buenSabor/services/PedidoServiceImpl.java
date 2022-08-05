@@ -29,9 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.buenSabor.entity.ArticuloManufacturado;
 import com.buenSabor.entity.Cliente;
-import com.buenSabor.entity.DetallePedido;
 import com.buenSabor.entity.Pedido;
 import com.buenSabor.repository.PedidoRepository;
 import com.buenSabor.services.Enumeration.EstadoEnum;
@@ -216,6 +214,11 @@ public class PedidoServiceImpl extends CommonServiceImpl<Pedido, PedidoRepositor
 			ex.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public Pedido ultimoPedido() {
+		return pedidoRepository.findTopByOrderByIdDesc();
 	}
 
 }

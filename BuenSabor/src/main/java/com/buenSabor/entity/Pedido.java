@@ -58,15 +58,15 @@ public class Pedido {
 	@Column(name= "estado_interno")
 	private String estadoInterno;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "fk_mercado_pago_datos")
 	private MercadoPagoDatos mercadoPagoDatos;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "domicilio")
 	private Domicilio domicilio;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "fk_cliente")
 	private Cliente cliente;
 	

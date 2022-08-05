@@ -18,14 +18,11 @@ public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteReposi
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
 
 	public ClienteServiceImpl(DomicilioService domicilioService) {
 		super();
 		this.domicilioService = domicilioService;
 	}
-
-
 
 	@Override
 	public Cliente updateCliente(Cliente cliente, Long id) {
@@ -42,15 +39,20 @@ public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteReposi
 		clienteDB.setTelefono(cliente.getTelefono());
 		clienteDB.setEmail(cliente.getEmail());
 		
-		Optional<Domicilio> domicilioOptional = domicilioService.findById(clienteDB.getDomicilio().getId());
-		//Actualizo el domicilio si lo tiene
-		if(domicilioOptional.isPresent()) {
-			domicilioOptional.get().setCalle(cliente.getDomicilio().getCalle());
-			domicilioOptional.get().setLocalidad(cliente.getDomicilio().getLocalidad());
-			domicilioOptional.get().setNumero(cliente.getDomicilio().getNumero());
+		if(clienteDB.getDomicilio() != null) {
+			
+			Optional<Domicilio> domicilioOptional = domicilioService.findById(clienteDB.getDomicilio().getId());
+			//Actualizo el domicilio si lo tiene
+			if(domicilioOptional.isPresent()) {
+				domicilioOptional.get().setCalle(cliente.getDomicilio().getCalle());
+				domicilioOptional.get().setLocalidad(cliente.getDomicilio().getLocalidad());
+				domicilioOptional.get().setNumero(cliente.getDomicilio().getNumero());
+			}else {
+				throw new BuenSaborException("Dirección", "No se encuentra la dirección");
+			}
 			
 		//Me fijo si el cliente que me están enviando tiene domicilio cargado, y si no lo tiene se lo agrego
-		}else if(cliente.getDomicilio() != null) {
+		}else {
 			Domicilio nuevoDomicilio = new Domicilio();
 			nuevoDomicilio.setCalle(cliente.getDomicilio().getCalle());
 			nuevoDomicilio.setLocalidad(cliente.getDomicilio().getLocalidad());
@@ -60,13 +62,9 @@ public class ClienteServiceImpl extends CommonServiceImpl<Cliente, ClienteReposi
 			clienteDB.setDomicilio(nuevoDomicilio);
 		}
 		
-		
 		save(clienteDB);
-		
 		return clienteDB;
 	}
-
-
 
 	@Override
 	public Optional<Cliente> findByEmail(String email) {

@@ -119,5 +119,10 @@ public class PedidoController extends CommonController<Pedido, PedidoService>{
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
             .body(file);
     }
+	
+	@GetMapping("/ultimoPedido")
+	public ResponseEntity<?> ultimoPedido(){
+		return ResponseEntity.ok().body(service.ultimoPedido());
+	}
 
 }
