@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,9 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 	private final ClienteService clienteService;
 	
 	private final DomicilioService domicilioService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public UsuarioController(ClienteService clienteService, DomicilioService domicilioService) {
 		super();
@@ -95,10 +100,16 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 				
 				usuario.getCliente().setDomicilio(domicilio);
 			}
+			
+
+			
+			usuario.setClave(passwordEncoder.encode(usuario.getClave()));
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(service.save(usuario));
 
 		} else {
+			
+			usuarioOptional.get().setClave(passwordEncoder.encode(usuario.getClave()));
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(usuarioOptional.get());
 
@@ -120,9 +131,26 @@ public class UsuarioController extends CommonController<Usuario, UsuarioService>
 		if(result.hasErrors()) {
 			return this.validar(result);
 		}		
+		
+		entity.setClave(passwordEncoder.encode(entity.getClave()));
+		
 		Usuario entityDB = service.save(entity);
 		
 		service.findConfiguracionAndUpdate();
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(entityDB);
+	}
+	
+	@PostMapping("/pass")
+	public ResponseEntity<?> crearConPassEncriptada(@Valid @RequestBody Usuario entity, BindingResult result){ //Binding.. -> A través del resultado obtenemos los msj de error, y tiene que ir justo dsp del request body 
+		
+		if(result.hasErrors()) {
+			return this.validar(result);
+		}		
+		
+		entity.setClave(passwordEncoder.encode(entity.getClave()));
+		
+		Usuario entityDB = service.save(entity);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(entityDB);
 	}
