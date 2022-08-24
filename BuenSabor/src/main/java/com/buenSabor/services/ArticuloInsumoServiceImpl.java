@@ -58,4 +58,10 @@ public class ArticuloInsumoServiceImpl extends CommonServiceImpl<ArticuloInsumo,
 		}
 	}
 
+
+	@Override
+	public Iterable<ArticuloInsumo> findImagenRubro(Long id) {
+		return articuloInsumoRepository.findByfkRubro(id);
+	}
+
 }

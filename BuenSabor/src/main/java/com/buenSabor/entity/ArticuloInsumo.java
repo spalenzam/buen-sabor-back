@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -15,6 +16,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "articulo_insumo")
@@ -58,6 +61,10 @@ public class ArticuloInsumo {
 	@Column(name = "fecha_baja")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaBaja;
+	
+	@Lob
+	@JsonIgnore
+	private byte [] imagen;
 	
 	@ManyToOne()
 	@JoinColumn(name = "fk_rubro_articulo")
@@ -142,7 +149,17 @@ public class ArticuloInsumo {
 	public void setFechaBaja(Date fechaBaja) {
 		this.fechaBaja = fechaBaja;
 	}
+
+	public byte[] getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(byte[] imagen) {
+		this.imagen = imagen;
+	}
 	
-	
+	public Integer getImagenHashCode() {
+		return (this.imagen != null) ? this.imagen.hashCode() : null;
+	}
 
 }
