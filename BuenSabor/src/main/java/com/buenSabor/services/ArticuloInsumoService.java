@@ -9,4 +9,5 @@ public interface ArticuloInsumoService extends CommonService<ArticuloInsumo>{
 	
 	ArticuloInsumo deleteByIdAndBaja(Long id);
 
+	Iterable<ArticuloInsumo> findImagenRubro(Long id);
 }
