@@ -260,11 +260,12 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
 			cell = row.createCell(1);
 			cell.setCellValue("TOTAL VENTA");
 			cell.setCellStyle(headerCellStyle);
+			
+			cell = row.createCell(2);
+			cell.setCellValue("DETALLE");
+			cell.setCellStyle(headerCellStyle);
 
-			/*
-			 * cell = row.createCell(2); cell.setCellValue("BOLETOS");
-			 * cell.setCellStyle(headerCellStyle);
-			 */
+			
 
 			CellStyle listCellStyle = workbook.createCellStyle();
 			listCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -278,11 +279,15 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
 				cell3 = dataRow.createCell(1);
 				cell3.setCellValue(ingresosDiarioYMensualDTO.getFactura().get(i).getTotalVenta());
 
-				/*
-				 * cell3 = dataRow.createCell(2);
-				 * cell3.setCellValue(listadoDTO.getListadoDetalles().get(i).getCantidadBoletos(
-				 * )); cell3.setCellStyle(listCellStyle);
-				 */
+				String detalle = "";
+				
+				for(DetalleFactura deta : ingresosDiarioYMensualDTO.getFactura().get(i).getDetallefacturas()) {
+					detalle = detalle.concat(String.valueOf(deta.getCantidad()) + " - " + deta.getArtmanufacturado().getDenominacion() + ", ");
+				}
+			
+				
+				cell3 = dataRow.createCell(2);
+				cell3.setCellValue(detalle);
 			}
 
 			sheet.createFreezePane(0, 4);
@@ -373,11 +378,12 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
 			cell = row.createCell(1);
 			cell.setCellValue("TOTAL VENTA");
 			cell.setCellStyle(headerCellStyle);
+			
+			cell = row.createCell(2);
+			cell.setCellValue("DETALLE");
+			cell.setCellStyle(headerCellStyle);
 
-			/*
-			 * cell = row.createCell(2); cell.setCellValue("BOLETOS");
-			 * cell.setCellStyle(headerCellStyle);
-			 */
+
 
 			CellStyle listCellStyle = workbook.createCellStyle();
 			listCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -390,12 +396,21 @@ public class FacturaServiceImpl extends CommonServiceImpl<Factura, FacturaReposi
 
 				cell3 = dataRow.createCell(1);
 				cell3.setCellValue(ingresosDiarioYMensualDTO.getFactura().get(i).getTotalVenta());
+				
 
-				/*
-				 * cell3 = dataRow.createCell(2);
-				 * cell3.setCellValue(listadoDTO.getListadoDetalles().get(i).getCantidadBoletos(
-				 * )); cell3.setCellStyle(listCellStyle);
-				 */
+				String detalle = "";
+				
+				for(DetalleFactura deta : ingresosDiarioYMensualDTO.getFactura().get(i).getDetallefacturas()) {
+					detalle = detalle.concat(String.valueOf(deta.getCantidad()) + " - " + deta.getArtmanufacturado().getDenominacion() + ", ");
+				}
+			
+				
+				cell3 = dataRow.createCell(2);
+				cell3.setCellValue(detalle);
+				
+				System.out.println(detalle);
+				
+
 			}
 
 			sheet.createFreezePane(0, 4);

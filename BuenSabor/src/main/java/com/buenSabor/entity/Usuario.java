@@ -41,7 +41,7 @@ public class Usuario {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaBaja;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "fk_cliente")
 	private Cliente cliente;
 	
